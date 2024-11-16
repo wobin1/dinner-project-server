@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Depends
-from modules.shared.models import session, Guest
+from modules.shared.models import session, Guest, User
 from passlib.context import CryptContext
 from .schemas import GuestModel
 from modules.shared.response import Response
@@ -64,11 +64,21 @@ def get_guest_metrics():
     return response.success(data=metrics)
 
 
-# @guests_router.patch('/{guest_id}')
-# def get_single_guest(guest_id):
-#     guest = session.query(Guest).filter(Guest.id == guest_id).first()
+@guests_router.get('/{guest_id}')
+def get_single_guest(guest_id):
+    guest = session.query(Guest).filter(Guest.id == guest_id).first()
 
-#     return response.success(data= "guests type updated successfully")
+
+    guests_data = {}
+    guests_data['id'] = guest.id
+    guests_data['full_name'] = guest.full_name
+    guests_data['email'] = guest.email
+    guests_data['phone_number'] = guest.phone_number
+    guests_data['church'] = utility.get_user(guest.id)
+    guests_data['attendance_status'] = guest.attendance_status
+
+
+    return response.success(data= [guests_data])
 
 
 @guests_router.patch('/checkin/{guest_id}')
