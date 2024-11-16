@@ -7,8 +7,8 @@ import uuid
 
 Base = declarative_base()
 session = sessionmaker()
-engine = create_engine('postgresql://postgres:password@localhost/dinner_db')
-# engine = create_engine('postgresql://neondb_owner:Be6nRwt2xmWb@ep-cold-wind-a5s4z0ck.us-east-2.aws.neon.tech/neondb?sslmode=require')
+# engine = create_engine('postgresql://postgres:password@localhost/dinner_db')
+engine = create_engine('postgresql://dinner_db_user:yjE5j4sSC1HAZIdwSvXIDFBjGy5ogFUV@dpg-css1vuhu0jms73e4tnl0-a.oregon-postgres.render.com/dinner_db')
 session = session(bind = engine)
 
 
