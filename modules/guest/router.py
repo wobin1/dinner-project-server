@@ -89,6 +89,20 @@ def get_single_guest(guest_id):
     return response.success(data= [guests_data])
 
 
+@guests_router.get('/users/{user_id}')
+def get_user_guest(user_id):
+    guest = session.query(Guest).filter(Guest.church == user_id).all()
+    print('guest:', guest)
+
+    data = utility.guest_to_dict(guest)
+
+    return response.success(data= data)
+
+
+
+    return response.success(data= [guests_data])
+
+
 @guests_router.get('/tables/{table_id}')
 def get_single_table(table_id):
     table = session.query(TableType).filter(TableType.id == table_id).first()
