@@ -7,8 +7,8 @@ import uuid
 
 Base = declarative_base()
 session = sessionmaker()
-# engine = create_engine('postgresql://postgres:password@localhost/dinner_db')
-engine = create_engine('postgresql://dinner_db_user:yjE5j4sSC1HAZIdwSvXIDFBjGy5ogFUV@dpg-css1vuhu0jms73e4tnl0-a.oregon-postgres.render.com/dinner_db')
+engine = create_engine('postgresql://postgres:password@localhost/dinner_db')
+# engine = create_engine('postgresql://dinner_db_user:yjE5j4sSC1HAZIdwSvXIDFBjGy5ogFUV@dpg-css1vuhu0jms73e4tnl0-a.oregon-postgres.render.com/dinner_db')
 session = session(bind = engine)
 
 def generate_uuid():

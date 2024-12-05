@@ -1,6 +1,10 @@
+from modules.shared.models import session, Guest
 
 class Utility():
 
+    def userGuestCount(self, church_id):
+        count = session.query(Guest).filter(Guest.church == church_id).count()
+        return count
     def user_to_dict(self, users):
         users_data = {}
         data = []
@@ -13,6 +17,7 @@ class Utility():
             users_data['is_church'] = user.is_church
             users_data['is_admin'] = user.is_admin
             users_data['is_bouncer'] = user.is_bouncer
+            users_data['guest_count'] = self.userGuestCount(user.id)
 
             data.append(users_data)
             users_data = {}
