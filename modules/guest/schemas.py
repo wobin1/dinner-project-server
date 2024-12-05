@@ -9,6 +9,7 @@ class GuestModel(BaseModel):
     phone_number: str
     church: int
     attendance_status: Optional[bool] =None
+    table: int
 
 
 class GetGuestModel(BaseModel):

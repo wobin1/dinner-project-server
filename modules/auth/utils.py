@@ -1,5 +1,6 @@
 from passlib.context import CryptContext
 from fastapi import HTTPException
+from typing import Union
 import os
 from datetime import datetime, timedelta
 from jose import JWTError, jwt
@@ -22,7 +23,7 @@ class Utility():
     def verify_password(self, plain_password, hashed_password):
         return pwd_context.verify(plain_password, hashed_password)
     
-    def create_access_token(self, data: dict, expires_delta: timedelta | None = None):
+    def create_access_token(self, data: dict, expires_delta: Union[timedelta, None] = None):
         to_encode = data.copy()
         if expires_delta:
             expire = datetime.utcnow() + expires_delta

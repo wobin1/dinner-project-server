@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Depends
-from modules.shared.models import session, Guest, User
+from modules.shared.models import session, Guest, User, TableType
 from passlib.context import CryptContext
 from .schemas import GuestModel
 from modules.shared.response import Response
@@ -24,7 +24,7 @@ auth_service = AuthService()
 def get_guests():
     # print('current guest:', current_guest)
     guests = session.query(Guest).all()
-    
+    print('guests:', guests)
     data = utility.guest_to_dict(guests)
 
     return response.success(data=data)
@@ -37,7 +37,7 @@ def create_guest(payload: GuestModel):
     if guest_exist:
         return exception.bad_request(message="guest with email already exists")
 
-    new_guest = Guest(full_name = payload.full_name, email = payload.email, phone_number = payload.phone_number, church = payload.church, attendance_status = 1)
+    new_guest = Guest(full_name = payload.full_name, email = payload.email, phone_number = payload.phone_number, church = payload.church, attendance_status = 1, table=payload.table)
     session.add(new_guest)
     session.commit()
     session.refresh(new_guest)
@@ -63,22 +63,43 @@ def get_guest_metrics():
 
     return response.success(data=metrics)
 
+@guests_router.get('/tables')
+def get_tables():
+    table = session.query(TableType).all()
+
+    data = utility.table_to_dict(table)
+
+    return response.success(data=data)
 
 @guests_router.get('/{guest_id}')
 def get_single_guest(guest_id):
     guest = session.query(Guest).filter(Guest.id == guest_id).first()
-
+    print('guest:', guest.table)
 
     guests_data = {}
     guests_data['id'] = guest.id
     guests_data['full_name'] = guest.full_name
     guests_data['email'] = guest.email
     guests_data['phone_number'] = guest.phone_number
-    guests_data['church'] = utility.get_user(guest.id)
+    guests_data['church'] = utility.get_user(guest.church)
+    guests_data['table'] = utility.get_table(guest.table)
     guests_data['attendance_status'] = guest.attendance_status
 
 
     return response.success(data= [guests_data])
+
+
+@guests_router.get('/tables/{table_id}')
+def get_single_table(table_id):
+    table = session.query(TableType).filter(TableType.id == table_id).first()
+
+
+    table_data = {}
+    table_data['id'] = table.id
+    table_data['type'] = table.type
+
+
+    return response.success(data= [table_data])
 
 
 @guests_router.patch('/checkin/{guest_id}')
@@ -110,9 +131,6 @@ def verify_guest(guest_id):
         return exception.bad_request('Guest checked out successfully')
     else:
         return response.success(data= "Guest is not checked in yet")
-
-
-
 
 
 @guests_router.delete('/{guest_id}')
