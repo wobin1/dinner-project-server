@@ -70,10 +70,19 @@ def get_bouncers():
 
     return response.success(data=data)
 
-@users_router.patch('/{user_id}')
+@users_router.patch('/admin/{user_id}')
 def get_single_user(user_id):
     user = session.query(User).filter(User.id == user_id).first()
     user.is_admin = not user.is_admin
+    session.commit()
+
+    return response.success(data= "users type updated successfully")
+
+
+@users_router.patch('/bouncer/{user_id}')
+def get_single_user(user_id):
+    user = session.query(User).filter(User.id == user_id).first()
+    user.is_bouncer = not user.is_bouncer
     session.commit()
 
     return response.success(data= "users type updated successfully")
