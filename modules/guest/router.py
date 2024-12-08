@@ -119,7 +119,7 @@ def get_single_table(table_id):
 @guests_router.patch('/checkin/{guest_id}')
 def verify_guest(guest_id):
     guest = session.query(Guest).filter(Guest.id == guest_id).first()
-    print('guest', guest.attendance_status)
+    print('guest status', guest.attendance_status)
     if guest.attendance_status == 3:
         guest.attendance_status = 1
         session.commit()
