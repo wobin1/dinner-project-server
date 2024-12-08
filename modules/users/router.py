@@ -37,7 +37,7 @@ def create_user(payload: UserModel):
 
     if user_exist:
         return exception.bad_request(message="user already exists")
-
+    print(payload)
     new_user = User(full_name = payload.full_name, email = payload.email, phone_number = payload.phone_number, password = password_hash, is_church = payload.is_church, is_bouncer = payload.is_bouncer,  is_admin = payload.is_admin)
     session.add(new_user)
     session.commit()

@@ -119,15 +119,15 @@ def get_single_table(table_id):
 @guests_router.patch('/checkin/{guest_id}')
 def verify_guest(guest_id):
     guest = session.query(Guest).filter(Guest.id == guest_id).first()
-    print('guest', guest)
-    if guest.attendance_status == 1:
-        guest.attendance_status = 2
+    print('guest', guest.attendance_status)
+    if guest.attendance_status == 3:
+        guest.attendance_status = 1
         session.commit()
         return response.success(data= "guest checked in successfully")
-    elif guest.attendance_status == 2:
+    elif guest.attendance_status == 1:
         return exception.bad_request('User has already checked in')
-    elif guest.attendance_status == 3:
-        guest.attendance_status = 2
+    elif guest.attendance_status == 2:
+        guest.attendance_status = 1
         session.commit()
         return response.success(data= "guest checked in successfully")
     else:
@@ -139,12 +139,12 @@ def verify_guest(guest_id):
 def verify_guest(guest_id):
     guest = session.query(Guest).filter(Guest.id == guest_id).first()
     print('guest', guest)
-    if guest.attendance_status == 2:
-        guest.attendance_status = 3
+    if guest.attendance_status == 1:
+        guest.attendance_status = 2
         session.commit()
-        return exception.bad_request('Guest checked out successfully')
+        return response.success('Guest checked out successfully')
     else:
-        return response.success(data= "Guest is not checked in yet")
+        return exception.bad_request(data= "Guest is not checked in yet")
 
 
 @guests_router.delete('/{guest_id}')
